@@ -19,7 +19,7 @@ function encode(val: string): string {
     .replace(/%5D/gi, ']')
 }
 
-export function bulidURL(url: string, params?: any) {
+export function buildURL(url: string, params?: any) {
   if (!params) {
     return url
   }
@@ -53,19 +53,21 @@ export function bulidURL(url: string, params?: any) {
 
       parts.push(`${encode(key)}=${encode(value)}`)
     })
-
-    let serializedParams = parts.join('&')
-
-    if (serializedParams) {
-      // 去除哈希值
-      const markIndex = url.indexOf('#')
-      if (markIndex !== -1) {
-        url = url.slice(0, markIndex)
-      }
-
-      // 处理 '?'
-      url += (url.indexOf('?') === -1 ? '?' : '') + serializedParams
-    }
   })
+
+  let serializedParams = parts.join('&')
+
+  if (serializedParams) {
+    // 去除哈希值
+    const markIndex = url.indexOf('#')
+    if (markIndex !== -1) {
+      url = url.slice(0, markIndex)
+    }
+
+    // 处理 '?'
+    url += (url.indexOf('?') === -1 ? '?' : '') + serializedParams
+  }
+
+  return url
 }
 
