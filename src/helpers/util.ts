@@ -29,5 +29,5 @@ export function isObject(val: any): val is Object {
  * @param val
  */
 export function isPlainObject(val: any): val is Object {
-  return toString.call(val) === '[object object]'
+  return toString.call(val) === '[object Object]'
 }
