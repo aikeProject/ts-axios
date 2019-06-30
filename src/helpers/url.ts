@@ -6,7 +6,7 @@
  * 处理url
  */
 
-import { isDate, isObject } from './util'
+import { isDate, isPlainObject } from './util'
 
 function encode(val: string): string {
   return encodeURIComponent(val)
@@ -47,7 +47,7 @@ export function buildURL(url: string, params?: any) {
         value = value.toISOString()
       }
       // 对象
-      else if (isObject(val)) {
+      else if (isPlainObject(val)) {
         value = JSON.stringify(value)
       }
 
