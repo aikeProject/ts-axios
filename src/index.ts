@@ -3,7 +3,7 @@
  * Date: 2019/6/30 0030
  * Time: 11:44
  */
-import { AxiosRequestConfig } from './types'
+import { AxiosRequestConfig, AxiosPromise } from './types'
 import xhr from './xhr'
 import { buildURL } from './helpers/url'
 import { transformRequest } from './helpers/data'
@@ -13,9 +13,9 @@ import { processHeaders } from './helpers/headers'
  * axios 入口函数
  * @param config
  */
-function axios(config: AxiosRequestConfig): void {
+function axios(config: AxiosRequestConfig): AxiosPromise {
   processConfig(config)
-  xhr(config)
+  return xhr(config)
 }
 
 /**
