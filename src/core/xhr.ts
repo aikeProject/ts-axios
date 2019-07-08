@@ -3,8 +3,8 @@
  * Date: 2019/6/30 0030
  * Time: 11:49
  */
-import { AxiosRequestConfig, AxiosResponse, AxiosPromise } from './types'
-import { createError } from './helpers/error'
+import { AxiosRequestConfig, AxiosResponse, AxiosPromise } from '../types'
+import { createError } from '../helpers/error'
 
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
   return new Promise((resolve, reject) => {
