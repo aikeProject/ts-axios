@@ -69,6 +69,8 @@ export interface Axios {
   patch(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise
 }
 
+// 函数重载
 export interface AxiosInstance extends Axios {
   (config: AxiosRequestConfig): AxiosPromise
+  (url: string, config?: AxiosRequestConfig): AxiosPromise
 }
