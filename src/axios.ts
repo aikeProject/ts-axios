@@ -3,6 +3,8 @@ import Axios from './core/Axios'
 import { extend } from './helpers/util'
 import defaults from './defaults'
 import mergeConfig from './core/mergeConfig'
+import CancelToken from './cancel/CancelToken'
+import Cancel, { isCancel } from './cancel/Cancel'
 
 function createInstance(config: AxiosRequestConfig): AxiosStatic {
   const context = new Axios(config)
@@ -19,6 +21,9 @@ const axios = createInstance(defaults)
 axios.create = function(config) {
   return createInstance(mergeConfig(defaults, config))
 }
+axios.CancelToken = CancelToken
+axios.Cancel = Cancel
+axios.isCancel = isCancel
 
 // 当我们执行 axios({}) 其实就相当于执行了 request 方法去发送请求
 export default axios

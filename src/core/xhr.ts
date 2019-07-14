@@ -8,7 +8,7 @@ import { createError } from '../helpers/error'
 
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
   return new Promise((resolve, reject) => {
-    const { url, data = null, method = 'get', headers, responseType, timeout } = config
+    const { url, data = null, method = 'get', headers, responseType, timeout, cancelToken } = config
 
     const request = new XMLHttpRequest()
 
@@ -51,6 +51,14 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
     // 请求超时
     request.ontimeout = function handleTimeout() {
       reject(createError(`Timeout of ${timeout} ms exceeded`, config, 'ECONNABORTED', request))
+    }
+
+    // 取消求情
+    if (cancelToken) {
+      cancelToken.promise.then(reason => {
+        request.abort()
+        reject(reason)
+      })
     }
 
     Object.keys(headers).forEach(value => {
