@@ -1,7 +1,30 @@
-import { AxiosPromise, AxiosRequestConfig, Method } from '../types'
+import { AxiosPromise, AxiosRequestConfig, AxiosResponse, Method } from '../types'
 import dispatchRequest from './dispatchRequest'
+import InterceptorManager from './InterceptorManager'
+import { RejectedFn, ResolvedFn } from '../types/index'
+
+interface Interceptors {
+  request: InterceptorManager<AxiosRequestConfig>
+  response: InterceptorManager<AxiosResponse>
+}
+
+interface PromiseChain {
+  resolved: ResolvedFn | ((config: AxiosRequestConfig) => AxiosPromise)
+  rejected?: RejectedFn
+}
 
 export default class Axios {
+  interceptors: Interceptors
+
+  constructor() {
+    this.interceptors = {
+      // 请求拦截器实例
+      request: new InterceptorManager<AxiosRequestConfig>(),
+      // 响应拦截器实例
+      response: new InterceptorManager<AxiosResponse>()
+    }
+  }
+
   request(url: any, config?: any): AxiosPromise {
     if (typeof url === 'string') {
       if (!config) config = {}
@@ -9,7 +32,33 @@ export default class Axios {
     } else {
       config = url
     }
-    return dispatchRequest(config)
+
+    const chain: PromiseChain[] = [
+      {
+        resolved: dispatchRequest,
+        rejected: undefined
+      }
+    ]
+
+    // 请求拦截器 后添加的先执行
+    this.interceptors.request.froEach(interceptor => {
+      chain.unshift(interceptor)
+    })
+
+    // 响应拦截器 先添加的先执行
+    this.interceptors.response.froEach(interceptor => {
+      chain.push(interceptor)
+    })
+
+    // 链式调用
+    let promise = Promise.resolve(config)
+
+    while (chain.length) {
+      const { resolved, rejected } = chain.shift()!
+      promise = promise.then(resolved, rejected)
+    }
+
+    return promise
   }
 
   get(url: string, config?: AxiosRequestConfig): AxiosPromise {
