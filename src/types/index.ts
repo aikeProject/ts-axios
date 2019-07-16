@@ -36,6 +36,9 @@ export interface AxiosRequestConfig {
   // XSRF
   xsrfCookieName?: string
   xsrfHeaderName?: string
+  // 上传和下载
+  onDownloadProgress?: (e: ProgressEvent) => void
+  onUploadProgress?: (e: ProgressEvent) => void
 
   [propName: string]: any
 }

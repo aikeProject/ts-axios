@@ -9,6 +9,9 @@ const bodyParser = require('body-parser')
 const webpack = require('webpack')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
+const cookieParser = require('cookie-parser')
+const multipart = require('connect-multiparty')
+const path = require('path')
 const WebpackConfig = require('./webpack.config')
 
 // 启动server2
@@ -29,7 +32,7 @@ app.use(webpackDevMiddleware(compiler, {
 app.use(webpackHotMiddleware(compiler))
 
 app.use(express.static(__dirname, {
-  setHeaders (res) {
+  setHeaders(res) {
     res.cookie('XSRF-TOKEN-D', '1234abc')
   }
 }))
@@ -38,6 +41,11 @@ app.use(express.static(__dirname))
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(cookieParser())
+
+app.use(multipart({
+  uploadDir: path.resolve(__dirname, 'upload-file')
+}))
 
 router.get('/simple/get', function(req, res) {
   res.json({
@@ -166,15 +174,15 @@ function registerCancelRouter() {
 
 registerMoreRouter()
 
-function registerMoreRouter () {
+function registerMoreRouter() {
   router.get('/more/get', function(req, res) {
     res.json(req.cookies)
   })
 
-  // router.post('/more/upload', function(req, res) {
-  //   console.log(req.body, req.files)
-  //   res.end('upload success!')
-  // })
+  router.post('/more/upload', function(req, res) {
+    console.log(req.body, req.files)
+    res.end('upload success!')
+  })
 
   // router.post('/more/post', function(req, res) {
   //   const auth = req.headers.authorization
