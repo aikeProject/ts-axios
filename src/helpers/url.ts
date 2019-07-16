@@ -109,3 +109,17 @@ export function isURLSameOrigin(requestURL: string): boolean {
     parsedOrigin.protocol === currentOrigin.protocol && parsedOrigin.host === currentOrigin.host
   )
 }
+
+/**
+ * 判断是不是绝对路径
+ * @param url
+ */
+export function isAbsolutURL(url: string): boolean {
+  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url)
+}
+
+export function combineURL(baseURL: string, relativeURL?: string): string {
+  return relativeURL
+    ? baseURL.replace('//+$/', '') + '/' + relativeURL.replace('/^/+/', '')
+    : baseURL
+}

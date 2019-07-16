@@ -5,7 +5,7 @@
  */
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types'
 import xhr from './xhr'
-import { buildURL } from '../helpers/url'
+import { buildURL, combineURL, isAbsolutURL } from '../helpers/url'
 import { flattenHeaders } from '../helpers/headers'
 import transform from './transform'
 
@@ -36,7 +36,10 @@ function processConfig(config: AxiosRequestConfig): void {
  * @param config
  */
 function transformUrl(config: AxiosRequestConfig): string {
-  const { url, params, paramsSerializer } = config
+  let { url, params, paramsSerializer, baseURL } = config
+  if (baseURL && !isAbsolutURL(url!)) {
+    url = combineURL(baseURL, url)
+  }
   // ! 的作用就是说 url 毕传 不会没有
   return buildURL(url!, params, paramsSerializer)
 }
