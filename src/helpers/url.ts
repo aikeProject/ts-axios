@@ -6,7 +6,7 @@
  * 处理url
  */
 
-import { isDate, isPlainObject } from './util'
+import { isDate, isPlainObject, isURLSearchParams } from './util'
 
 interface URLOrigin {
   protocol: string
@@ -24,43 +24,51 @@ function encode(val: string): string {
     .replace(/%5D/gi, ']')
 }
 
-export function buildURL(url: string, params?: any) {
+export function buildURL(url: string, params?: any, paramsSerializer?: (params: any) => string) {
   if (!params) {
     return url
   }
 
-  const parts: string[] = []
+  let serializedParams
 
-  Object.keys(params).forEach(key => {
-    let val = params[key]
-    if (val === null || typeof val === 'undefined') {
-      return
-    }
+  if (paramsSerializer) {
+    serializedParams = paramsSerializer(params)
+  } else if (isURLSearchParams(params)) {
+    serializedParams = params.toString()
+  } else {
+    const parts: string[] = []
 
-    let values: string[]
-    // 数组
-    if (Array.isArray(val)) {
-      values = val
-      key += '[]'
-    } else {
-      values = [val]
-    }
-
-    values.forEach(value => {
-      // 时间
-      if (isDate(value)) {
-        value = value.toISOString()
-      }
-      // 对象
-      else if (isPlainObject(val)) {
-        value = JSON.stringify(value)
+    Object.keys(params).forEach(key => {
+      let val = params[key]
+      if (val === null || typeof val === 'undefined') {
+        return
       }
 
-      parts.push(`${encode(key)}=${encode(value)}`)
+      let values: string[]
+      // 数组
+      if (Array.isArray(val)) {
+        values = val
+        key += '[]'
+      } else {
+        values = [val]
+      }
+
+      values.forEach(value => {
+        // 时间
+        if (isDate(value)) {
+          value = value.toISOString()
+        }
+        // 对象
+        else if (isPlainObject(val)) {
+          value = JSON.stringify(value)
+        }
+
+        parts.push(`${encode(key)}=${encode(value)}`)
+      })
     })
-  })
 
-  let serializedParams = parts.join('&')
+    serializedParams = parts.join('&')
+  }
 
   if (serializedParams) {
     // 去除哈希值

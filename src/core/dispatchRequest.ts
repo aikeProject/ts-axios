@@ -36,9 +36,9 @@ function processConfig(config: AxiosRequestConfig): void {
  * @param config
  */
 function transformUrl(config: AxiosRequestConfig): string {
-  const { url, params } = config
+  const { url, params, paramsSerializer } = config
   // ! 的作用就是说 url 毕传 不会没有
-  return buildURL(url!, params)
+  return buildURL(url!, params, paramsSerializer)
 }
 
 /**
