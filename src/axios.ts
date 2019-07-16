@@ -25,5 +25,17 @@ axios.CancelToken = CancelToken
 axios.Cancel = Cancel
 axios.isCancel = isCancel
 
+axios.all = function(promises) {
+  return Promise.all(promises)
+}
+
+axios.spread = function(callback) {
+  return function(arr) {
+    return callback.apply(null, arr)
+  }
+}
+
+axios.Axios = Axios
+
 // 当我们执行 axios({}) 其实就相当于执行了 request 方法去发送请求
 export default axios
