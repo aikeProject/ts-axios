@@ -39,6 +39,8 @@ export interface AxiosRequestConfig {
   // 上传和下载
   onDownloadProgress?: (e: ProgressEvent) => void
   onUploadProgress?: (e: ProgressEvent) => void
+  // HTTP 授权
+  auth?: AxiosBasicCredentials
 
   [propName: string]: any
 }
@@ -163,4 +165,9 @@ export interface ResolvedFn<T = any> {
 
 export interface RejectedFn {
   (error: any): any
+}
+
+export interface AxiosBasicCredentials {
+  username: string
+  password: string
 }

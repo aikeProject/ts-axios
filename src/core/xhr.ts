@@ -23,7 +23,8 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       xsrfCookieName,
       xsrfHeaderName,
       onDownloadProgress,
-      onUploadProgress
+      onUploadProgress,
+      auth
     } = config
 
     const request = new XMLHttpRequest()
@@ -104,6 +105,10 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
         if (xsrfValue && xsrfHeaderName) {
           headers[xsrfHeaderName] = xsrfValue
         }
+      }
+      if (auth) {
+        // 使用base64加密 username password
+        headers['Authorization'] = 'Basic ' + btoa(auth.username + ':' + auth.password)
       }
       Object.keys(headers).forEach(value => {
         // 请求数据为 null 删除 content-type
