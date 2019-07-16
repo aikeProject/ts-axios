@@ -33,6 +33,9 @@ export interface AxiosRequestConfig {
   cancelToken?: CancelToken
   // 跨域设置 携带cookie
   withCredentials?: boolean
+  // XSRF
+  xsrfCookieName?: string
+  xsrfHeaderName?: string
 
   [propName: string]: any
 }

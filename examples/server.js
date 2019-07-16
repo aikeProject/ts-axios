@@ -28,6 +28,12 @@ app.use(webpackDevMiddleware(compiler, {
 
 app.use(webpackHotMiddleware(compiler))
 
+app.use(express.static(__dirname, {
+  setHeaders (res) {
+    res.cookie('XSRF-TOKEN-D', '1234abc')
+  }
+}))
+
 app.use(express.static(__dirname))
 
 app.use(bodyParser.json())
@@ -169,7 +175,7 @@ function registerMoreRouter () {
   //   console.log(req.body, req.files)
   //   res.end('upload success!')
   // })
-  //
+
   // router.post('/more/post', function(req, res) {
   //   const auth = req.headers.authorization
   //   const [type, credentials] = auth.split(' ')
