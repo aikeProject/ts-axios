@@ -8,7 +8,16 @@ import { createError } from '../helpers/error'
 
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
   return new Promise((resolve, reject) => {
-    const { url, data = null, method = 'get', headers, responseType, timeout, cancelToken } = config
+    const {
+      url,
+      data = null,
+      method = 'get',
+      headers,
+      responseType,
+      timeout,
+      cancelToken,
+      withCredentials
+    } = config
 
     const request = new XMLHttpRequest()
 
@@ -19,6 +28,11 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
     if (timeout) {
       // 请求默认的超时时间是0，即用不超时
       request.timeout = timeout
+    }
+
+    // 跨域请求可以携带cookie
+    if (withCredentials) {
+      request.withCredentials = true
     }
 
     request.open(method.toUpperCase(), url!, true)
