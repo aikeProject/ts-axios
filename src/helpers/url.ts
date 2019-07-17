@@ -78,7 +78,7 @@ export function buildURL(url: string, params?: any, paramsSerializer?: (params: 
     }
 
     // 处理 '?'
-    url += (url.indexOf('?') === -1 ? '?' : '') + serializedParams
+    url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams
   }
 
   return url

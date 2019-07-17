@@ -60,3 +60,22 @@ export function flattenHeaders(headers: any, method: Method): any {
 
   return headers
 }
+
+/**
+ * 将请求头解析字符串解析为对象key：value形式
+ * @param headers
+ */
+export function parseHeaders(headers: string): any {
+  let parsed = Object.create(null)
+  if (!headers) return parsed
+
+  headers.split('\r\n').forEach(line => {
+    let [key, ...vals] = line.split(':')
+    key = key.trim().toLowerCase()
+    if (!key) return
+    const val = vals.join(':').trim()
+    parsed[key] = val
+  })
+
+  return parsed
+}
