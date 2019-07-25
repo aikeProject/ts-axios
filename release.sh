@@ -17,5 +17,5 @@ then
   git push origin master
 
   # publish
-  npm run publish
+  npm publish
 fi
