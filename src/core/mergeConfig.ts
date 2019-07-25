@@ -5,6 +5,7 @@
  */
 import { AxiosRequestConfig } from '../types'
 import { isPlainObject, deepMerge } from '../helpers/util'
+
 const strats = Object.create(null)
 
 // 默认合并策略
@@ -14,7 +15,7 @@ function defaultStrat(val1: any, val2: any): any {
 
 // 只接受自定义，配置合并策略
 function fromVal2Strat(val1: any, val2: any): any {
-  if (val2 !== 'undefined') return val2
+  if (typeof val2 !== 'undefined') return val2
 }
 
 const stratKeysFromVal2 = ['url', 'params', 'data']
