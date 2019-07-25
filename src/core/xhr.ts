@@ -125,10 +125,14 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
     function processCancel() {
       // 取消求情
       if (cancelToken) {
-        cancelToken.promise.then(reason => {
-          request.abort()
-          reject(reason)
-        })
+        cancelToken.promise
+          .then(reason => {
+            request.abort()
+            reject(reason)
+          })
+          .catch(() => {
+            // do nothing
+          })
       }
     }
 
